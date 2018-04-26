@@ -155,6 +155,32 @@ class ProjectController extends Controller
     }
 
     /**
+     * 启用“发布版本”
+     * @param Project $project
+     * @param         $version_id
+     * @return string
+     */
+    public function enableVersion(Project $project, $version_id) {
+        $publishVersion = PublishVersions::find($version_id);
+        $publishVersion->status = PublishVersions::ENABLED;
+        $publishVersion->save();
+        return "启用成功";
+    }
+
+    /**
+     * 禁用“发布版本”
+     * @param Project $project
+     * @param         $version_id
+     * @return string
+     */
+    public function disableVersion(Project $project, $version_id) {
+        $publishVersion = PublishVersions::find($version_id);
+        $publishVersion->status = PublishVersions::DISABLED;
+        $publishVersion->save();
+        return "禁用成功";
+    }
+
+    /**
      * Gets the latest deployments for a project.
      *
      * @param  Project $project

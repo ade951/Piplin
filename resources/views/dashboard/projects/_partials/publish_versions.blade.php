@@ -28,7 +28,8 @@
                 </td>
                 <td>
                     <div class="btn-group pull-right">
-                        <button>发布</button>
+                        <button type="button" class="btn btn-primary" onclick="enable_version({{$version->id}})">启用</button>
+                        <button type="button" class="btn btn-danger" onclick="disable_version({{$version->id}})">禁用</button>
                     </div>
                 </td>
             </tr>
@@ -39,4 +40,26 @@
     </div>
 
     @endif
+    <script>
+        function enable_version(id) {
+            $.ajax({
+                url: 'enable_version/' + id,
+                type: 'post',
+                success: function (data) {
+                    alert(data);
+                    location.reload();
+                },
+            });
+        }
+        function disable_version(id) {
+            $.ajax({
+                url: 'disable_version/' + id,
+                type: 'post',
+                success: function (data) {
+                    alert(data);
+                    location.reload();
+                },
+            });
+        }
+    </script>
 </div>

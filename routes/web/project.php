@@ -186,6 +186,16 @@ Route::group([
                     'uses' => 'ProjectController@recover',
                 ]);
 
+                // 启用发布版本
+                Route::post('project/{project}/enable_version/{version_id}', [
+                    'uses' => 'ProjectController@enableVersion',
+                ]);
+
+                // 禁用发布版本
+                Route::post('project/{project}/disable_version/{version_id}', [
+                    'uses' => 'ProjectController@disableVersion',
+                ]);
+
                 // Member
                 Route::post('members/{project}', [
                     'uses' => 'MemberController@store',
