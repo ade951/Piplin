@@ -23,6 +23,7 @@ use Piplin\Bus\Listeners\CreateJwtListener;
 use Piplin\Bus\Listeners\DeployLinkedEnvironmentListner;
 use Piplin\Bus\Listeners\EmailChangeConfirmationListener;
 use Piplin\Bus\Listeners\NotifyTaskListener;
+use Piplin\Bus\Listeners\PublishVersionsListener;
 use Piplin\Bus\Listeners\SendSignupEmailListener;
 use Piplin\Bus\Observers\CommandObserver;
 use Piplin\Bus\Observers\ConfigFileObserver;
@@ -62,6 +63,7 @@ class EventServiceProvider extends ServiceProvider
         TaskFinishedEvent::class       => [
             DeployLinkedEnvironmentListner::class,
             NotifyTaskListener::class,
+            PublishVersionsListener::class,
         ],
         EmailChangeRequestedEvent::class => [EmailChangeConfirmationListener::class],
         UserWasCreatedEvent::class       => [SendSignupEmailListener::class],
