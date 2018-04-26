@@ -11,3 +11,5 @@ composer.phar
 # Dependencies
 node_modules
 vendor
+
+storage

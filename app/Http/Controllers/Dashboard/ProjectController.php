@@ -14,10 +14,12 @@ namespace Piplin\Http\Controllers\Dashboard;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use McCool\LaravelAutoPresenter\Facades\AutoPresenter;
 use Piplin\Bus\Jobs\SetupSkeletonJob;
 use Piplin\Http\Controllers\Controller;
 use Piplin\Http\Requests\StoreProjectRequest;
 use Piplin\Models\Command;
+use Piplin\Models\PublishVersions;
 use Piplin\Models\Task;
 use Piplin\Models\Project;
 
@@ -46,6 +48,7 @@ class ProjectController extends Controller
             'targetable_id'   => $project->id,
             'optional'        => $optional,
             'tasks'           => $this->getLatest($project),
+            'publish_versions'=> $this->getLatestPublishVersions($project),
             'tab'             => $tab,
             'breadcrumb'      => [
                 ['url' => route('projects', ['id' => $project->id]), 'label' => $project->name],
@@ -61,6 +64,8 @@ class ProjectController extends Controller
             $data['title']   = trans('members.label');
         } elseif ($tab === 'environments') {
             $data['title'] = trans('environments.label');
+        } elseif ($tab === 'publish_versions') {
+            $data['title'] = trans('publish_versions.label');
         }
 
         return view('dashboard.projects.show', $data);
@@ -159,9 +164,23 @@ class ProjectController extends Controller
     private function getLatest(Project $project, $paginate = 15)
     {
         return Task::where('project_id', $project->id)
-                           ->with('user')
-                           ->whereNotNull('started_at')
-                           ->orderBy('started_at', 'DESC')
+            ->with('user')
+            ->whereNotNull('started_at')
+            ->orderBy('started_at', 'DESC')
+            ->paginate($paginate);
+    }
+
+    /**
+     * Gets the latest publish versions for a project.
+     *
+     * @param  Project $project
+     * @param  int     $paginate
+     * @return array
+     */
+    private function getLatestPublishVersions(Project $project, $paginate = 15)
+    {
+        return PublishVersions::where('project_id', $project->id)
+                           ->orderBy('id', 'DESC')
                            ->paginate($paginate);
     }
 }
