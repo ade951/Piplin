@@ -20,7 +20,7 @@ class PublishVersionsPresenter extends CommandPresenter
         if ($this->wrappedObject->status === PublishVersions::ENABLED) {
             return 'success';
         } elseif ($this->wrappedObject->status === PublishVersions::PENDING) {
-            return 'info';
+            return 'pending';
         } elseif ($this->wrappedObject->status === PublishVersions::DISABLED) {
             return 'danger';
         }

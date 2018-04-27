@@ -38,4 +38,12 @@ class PublishVersions extends Model implements HasPresenter
     {
         return PublishVersionsPresenter::class;
     }
+
+    /**
+     * Get the project associated with the version.
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function project() {
+        return $this->hasOne(Project::class, 'id', 'project_id');
+    }
 }

@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Piplin\Bus\Jobs\AbortTaskJob;
 use Piplin\Bus\Jobs\CreateTaskJob;
 use Piplin\Http\Controllers\Controller;
+use Piplin\Models\PublishVersions;
 use Piplin\Models\Task;
 use Piplin\Models\Project;
 use Piplin\Services\Webhooks\Beanstalkapp;
@@ -57,18 +58,33 @@ class IncomingWebhookController extends Controller
      * Handles incoming requests to trigger deploy.
      *
      * @param Request $request
-     * @param string  $hash
+     * @param string  $versionHash 发布版本的哈希值
      *
      * @return Response
      */
-    public function deploy(Request $request, $hash)
+    public function deploy(Request $request, $versionHash)
     {
-        $project = Project::where('hash', $hash)->firstOrFail();
+        //TODO 权限控制：拿Token去项目后台比对
+
+        $publishVersion = PublishVersions::where('version_hash', $versionHash)
+            ->where('status', PublishVersions::ENABLED)
+            ->firstOrFail();
+
+        $project = $publishVersion->project;
 
         $deployPlan = $project->deployPlan;
 
         $success = false;
         if ($deployPlan && $deployPlan->environments->count() > 0) {
+
+            $request['reason'] = $publishVersion->reason;
+            $request['project_id'] = $project->id;
+            $request['environments'] = $request->get('environment');
+            $request['source'] = 'commit';
+            $request['branch'] = $publishVersion->branch;
+            $request['commit'] = $publishVersion->commit;
+            $request['source_commit'] = $publishVersion->commit;
+
             $payload = $this->parseWebhookRequest($request, $project);
 
             if (is_array($payload) && ($project->allow_other_branch || $project->branch === $payload['branch'])) {
@@ -170,7 +186,10 @@ class IncomingWebhookController extends Controller
             return false;
         }
 
-        $payload['payload'] = $request->only(['source', 'source_tag']);
+        $payload['payload'] = $request->only(['source', "source_{$request->get('source')}"]);
+        if ($request->get('source') == 'commit') {
+            $payload['commit'] = $request->get('source_commit');
+        }
 
         $payload['optional'] = [];
 

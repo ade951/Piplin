@@ -14,6 +14,7 @@
             <tr>
                 <th>{{ trans('publish_versions.version_no') }}</th>
                 <th>{{ trans('publish_versions.description') }}</th>
+                <th>{{ trans('publish_versions.git_version') }}</th>
                 <th>{{ trans('app.status') }}</th>
                 <th class="text-right">{{ trans('app.actions') }}</th>
             </tr>
@@ -23,12 +24,15 @@
             <tr id="version_{{ $version->id }}">
                 <td>{{ $version->version_name }}</td>
                 <td>{{ $version->description }}</td>
+                <td>
+                    <a href="http://gitee.com/YiXinKeJi/QianBao/commit/{{$version->commit}}" target="_blank">{{ substr($version->commit, 0, 7) }}</a>({{ $version->branch }})
+                </td>
                 <td class="status">
                     <span class="text-{{$version->css_class}}"><i class="piplin piplin-{{ $version->icon }}"></i> <span>{{ $version->readable_status }}</span></span>
                 </td>
                 <td>
                     <div class="btn-group pull-right">
-                        <button type="button" class="btn btn-primary" onclick="enable_version({{$version->id}})">启用</button>
+                        <button type="button" class="btn btn-success" onclick="enable_version({{$version->id}})">启用</button>
                         <button type="button" class="btn btn-danger" onclick="disable_version({{$version->id}})">禁用</button>
                     </div>
                 </td>
