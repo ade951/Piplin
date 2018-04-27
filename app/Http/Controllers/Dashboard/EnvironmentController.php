@@ -99,7 +99,8 @@ class EnvironmentController extends Controller
             'default_on',
             'add_commands',
             'targetable_type',
-            'targetable_id'
+            'targetable_id',
+            'verify_url'
         );
 
         $targetable_type = array_pull($fields, 'targetable_type');
@@ -138,7 +139,8 @@ class EnvironmentController extends Controller
         $environment->update($request->only(
             'name',
             'description',
-            'default_on'
+            'default_on',
+            'verify_url'
         ));
 
         return $environment;

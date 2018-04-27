@@ -25,6 +25,8 @@ return [
     'description'         => '描述',
     'deployed'            => '最近部署',
     'desc_placeholder'    => '简要描述环境用途',
+    'verify_url'          => '鉴权链接',
+    'verify_url_placeholder'=> '当需要远程部署时，此字段必填',
     'warning'             => '信息保存失败.',
     'none'                => '还没有设置部署环境',
     'example'             => '例如：预发布、测试、生产',

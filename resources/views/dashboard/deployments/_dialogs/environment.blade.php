@@ -23,8 +23,14 @@
                     </div>
                     <div class="form-group">
                         <label class="col-sm-3 control-label" for="environment_description">{{ trans('environments.description') }}</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="environment_description" name="description" placeholder="{{ trans('environments.desc_placeholder') }}" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="verify_url">{{ trans('environments.verify_url') }}</label>
 						<div class="col-sm-9">
-							<input type="text" class="form-control" id="environment_description" name="description" placeholder="{{ trans('environments.desc_placeholder') }}" />
+							<input type="text" class="form-control" id="verify_url" name="verify_url" placeholder="{{ trans('environments.verify_url_placeholder') }}" />
 						</div>
                     </div>
                     <div class="form-group">

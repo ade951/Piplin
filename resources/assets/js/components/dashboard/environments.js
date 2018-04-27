@@ -49,6 +49,7 @@
             $('#environment_id').val('');
             $('#environment_name').val('');
             $('#environment_description').val('');
+            $('#verify_url').val('');
             $('#environment_default_on').prop('checked', true);
             $('#add-environment-command', modal).show();
         }
@@ -110,7 +111,8 @@
             default_on:      $('#environment_default_on').is(':checked'),
             targetable_type: $('input[name="targetable_type"]').val(),
             targetable_id:   $('input[name="targetable_id"]').val(),
-            add_commands:    $('#environment_commands').is(':checked')
+            add_commands:    $('#environment_commands').is(':checked'),
+            verify_url:      $('#verify_url').val()
         }, {
             wait: true,
             success: function(model, response, options) {
@@ -269,6 +271,7 @@
             $('#environment_id').val(this.model.id);
             $('#environment_name').val(this.model.get('name'));
             $('#environment_description').val(this.model.get('description'));
+            $('#verify_url').val(this.model.get('verify_url'));
             $('#environment_default_on').prop('checked', (this.model.get('default_on') === true));
         },
         trash: function() {
