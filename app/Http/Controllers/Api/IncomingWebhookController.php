@@ -170,6 +170,8 @@ class IncomingWebhookController extends Controller
             return false;
         }
 
+        $payload['payload'] = $request->only(['source', 'source_tag']);
+
         $payload['optional'] = [];
 
         // Check if the commands input is set, if so explode on comma and filter out any invalid commands
@@ -184,7 +186,7 @@ class IncomingWebhookController extends Controller
 
         $payload['environments'] = [];
         if ($request->has('environments')) {
-            $valid     = $project->environments->pluck('id');
+            $valid     = $project->deployPlan->environments->pluck('id');
             $requested = explode(',', $request->get('environments'));
 
             $payload['environments'] = collect($requested)->unique()
