@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-Route::post('deploy/{hash}', [
+Route::any('deploy/{hash}/{env?}', [
     'as'   => 'webhook.deploy',
     'uses' => 'Api\IncomingWebhookController@deploy',
 ]);

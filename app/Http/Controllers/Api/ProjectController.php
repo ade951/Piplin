@@ -41,18 +41,19 @@ class ProjectController extends Controller
     /**
      * 获取最新的发布版本
      *
-     * @param Request $request
+     * @param int $project_id
+     * @param int $environment_id
      *
      * @return array
      */
-    public function getLatestVersion(Request $request)
+    public function getLatestVersion($project_id, $environment_id)
     {
-        $project_id = $request->get('project_id');
 
         $version = PublishVersions::where('project_id', $project_id)
             ->where('status', PublishVersions::ENABLED)
             ->orderBy('id', 'desc')
             ->first();
+        $version->update_url = url('deploy/' . $version->version_hash . '/' . $environment_id);
 
         $response = [
             'status' => 'success',

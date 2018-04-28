@@ -13,6 +13,6 @@ Route::post('api/projects', [
     'uses' => 'Api\ProjectController@show',
 ]);
 
-Route::get('api/project/get_latest_version', [
+Route::get('api/project/get_latest_version/{project_id}/{env_id}', [
     'uses' => 'Api\ProjectController@getLatestVersion',
 ]);

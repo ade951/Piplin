@@ -55,15 +55,19 @@ class IncomingWebhookController extends Controller
     }
 
     /**
-     * Handles incoming requests to trigger deploy.
+     * 通过Webhook部署某个环境
      *
      * @param Request $request
+     * @param int     $env 部署环境id
      * @param string  $versionHash 发布版本的哈希值
      *
      * @return Response
      */
-    public function deploy(Request $request, $versionHash)
+    public function deploy(Request $request, string $versionHash, int $env = 0)
     {
+        if ($env == 0) {
+            return ['success' => '请选择环境'];
+        }
         //TODO 权限控制：拿Token去项目后台比对
 
         $publishVersion = PublishVersions::where('version_hash', $versionHash)
@@ -79,7 +83,7 @@ class IncomingWebhookController extends Controller
 
             $request['reason'] = $publishVersion->reason;
             $request['project_id'] = $project->id;
-            $request['environments'] = $request->get('environment');
+            $request['environments'] = $env;
             $request['source'] = 'commit';
             $request['branch'] = $publishVersion->branch;
             $request['commit'] = $publishVersion->commit;
