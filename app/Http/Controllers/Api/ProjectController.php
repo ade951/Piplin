@@ -72,6 +72,7 @@ class ProjectController extends Controller
      */
     public function getAvailableList($project_id, $environment_id)
     {
+        header('Access-Control-Allow-Origin: *');
         $lastVersionId = 0;
         $lastEnvironmentTask = EnvironmentTask::where('environment_id', $environment_id)
             ->orderBy('id', 'desc')
