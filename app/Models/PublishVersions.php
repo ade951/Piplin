@@ -27,7 +27,7 @@ class PublishVersions extends Model implements HasPresenter
      *
      * @var array
      */
-    protected $hidden = ['updated_at', 'deleted_at'];
+    protected $hidden = ['task_id', 'branch', 'commit', 'updated_at', 'deleted_at'];
 
     /**
      * Get the presenter class.

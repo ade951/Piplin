@@ -14,6 +14,7 @@ namespace Piplin\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Piplin\Http\Controllers\Controller;
+use Piplin\Models\EnvironmentTask;
 use Piplin\Models\Project;
 use Piplin\Models\PublishVersions;
 
@@ -58,6 +59,49 @@ class ProjectController extends Controller
         $response = [
             'status' => 'success',
             'data'   => $version,
+        ];
+
+        return $response;
+    }
+
+    /**
+     * 获取可用的更新列表
+     * @param $project_id
+     * @param $environment_id
+     * @return array
+     */
+    public function getAvailableList($project_id, $environment_id)
+    {
+        $lastVersionId = 0;
+        $lastEnvironmentTask = EnvironmentTask::where('environment_id', $environment_id)
+            ->orderBy('id', 'desc')
+            ->first();
+        if (!empty($lastEnvironmentTask)) {
+            $lastCommit = $lastEnvironmentTask->task->commit;
+            $lastVersion = PublishVersions::where('project_id', $project_id)
+                ->where('status', PublishVersions::ENABLED)
+                ->where('commit', $lastCommit)
+                ->orderBy('id', 'desc')
+                ->first();
+            if (!empty($lastVersion)) {
+                $lastVersionId = $lastVersion->id;
+            }
+        }
+
+        $versions = PublishVersions::where('project_id', $project_id)
+            ->where('status', PublishVersions::ENABLED)
+            ->where('id', '>=', $lastVersionId)
+            ->orderBy('id', 'desc')
+            ->limit(20)
+            ->get();
+
+        foreach ($versions as $version) {
+            $version->update_url = url('deploy/' . $version->version_hash . '/' . $environment_id);
+        }
+
+        $response = [
+            'status' => 'success',
+            'data'   => $versions,
         ];
 
         return $response;
