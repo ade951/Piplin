@@ -25,7 +25,7 @@ class CreatePublishVersionsTable extends Migration
             $table->unsignedInteger('project_id');
             $table->string('version_name'); //版本号
             $table->string('version_hash'); //版本哈希
-            $table->string('description'); //更新信息描述
+            $table->text('description')->nullable(); //更新信息描述
             $table->tinyInteger('status')->default(PublishVersions::PENDING);
             $table->softDeletes();
             $table->timestamps();

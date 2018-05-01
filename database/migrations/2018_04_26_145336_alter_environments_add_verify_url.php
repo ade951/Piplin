@@ -15,7 +15,7 @@ class AlterEnvironmentsAddVerifyUrl extends Migration
     public function up()
     {
         Schema::table($this->tableName, function (Blueprint $table) {
-            $table->string('verify_url');
+            $table->string('verify_url')->nullable();
         });
     }
 

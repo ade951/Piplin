@@ -4,9 +4,10 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AlterEnvironmentsChangeVerifyUrl extends Migration
+class AlterPublishVersionsAddBranchChangeReason extends Migration
 {
-    private $tableName = 'environments';
+    private $tableName = 'publish_versions';
+
     /**
      * Run the migrations.
      *
@@ -15,7 +16,7 @@ class AlterEnvironmentsChangeVerifyUrl extends Migration
     public function up()
     {
         Schema::table($this->tableName, function (Blueprint $table) {
-            $table->string('verify_url')->nullable()->change();
+            $table->string('branch')->default('master');
         });
     }
 
@@ -27,7 +28,7 @@ class AlterEnvironmentsChangeVerifyUrl extends Migration
     public function down()
     {
         Schema::table($this->tableName, function (Blueprint $table) {
-            $table->string('verify_url')->change();
+            $table->dropColumn('branch');
         });
     }
 }
