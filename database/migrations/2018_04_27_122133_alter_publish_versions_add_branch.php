@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AlterPublishVersionsAddBranchChangeReason extends Migration
+class AlterPublishVersionsAddBranch extends Migration
 {
     private $tableName = 'publish_versions';
 
