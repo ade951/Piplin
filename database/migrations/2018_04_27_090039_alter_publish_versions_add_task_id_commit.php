@@ -16,8 +16,8 @@ class AlterPublishVersionsAddTaskIdCommit extends Migration
     public function up()
     {
         Schema::table($this->tableName, function (Blueprint $table) {
-            $table->unsignedInteger('task_id');
-            $table->string('commit');
+            $table->unsignedInteger('task_id')->default(0);
+            $table->string('commit')->default('');
         });
     }
 
