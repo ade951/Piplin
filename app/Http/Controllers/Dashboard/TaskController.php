@@ -117,6 +117,7 @@ class TaskController extends Controller
             'environments'    => $request->get('environments'),
             'branch'          => $project->branch,
             'optional'        => [],
+            'version_name'    => trim($request->get('version_name', '')),
         ];
 
         /*

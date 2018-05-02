@@ -14,6 +14,12 @@
                     <div class="callout callout-danger">
                         <i class="icon piplin piplin-warning"></i> {{ trans('tasks.warning') }}
                     </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label" for="task_reason">{{ trans('tasks.version_name') }}</label>
+                        <div class="col-sm-9">
+                            <textarea rows="1" id="task_version_name" class="form-control" name="version_name" placeholder="{{ trans('tasks.describe_version_name') }}"></textarea>
+                        </div>
+                    </div>
                     @if (count($environments))
                     <div class="form-group">
                         <label class="col-sm-3 control-label" for="environments">{{ trans('tasks.environments') }}</label>

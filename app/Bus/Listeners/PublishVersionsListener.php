@@ -26,10 +26,10 @@ class PublishVersionsListener implements ShouldQueue
         $task    = $event->task;
         $project = $event->task->project;
 
-        if ($task->isSuccessful() && !$task->is_webhook) {
+        if ($task->isSuccessful() && !$task->is_webhook && !empty($task->version_name)) {
             $publishVersions = new PublishVersions();
             $publishVersions->project_id = $project->id;
-            $publishVersions->version_name = date('YmdHi');
+            $publishVersions->version_name = $task->version_name;
             $publishVersions->version_hash = uniqid();
             $publishVersions->description = $task->reason ?? '';
             $publishVersions->status = PublishVersions::PENDING;

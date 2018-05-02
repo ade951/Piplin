@@ -55,6 +55,7 @@
         });
 
         task.save({
+            version_name:    $('#task_version_name').val(),
             environments:    environment_ids,
             project_id:      $('input[name="project_id"]').val(),
             targetable_type: $('input[name="targetable_type"]').val(),

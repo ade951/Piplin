@@ -50,7 +50,6 @@ return [
     'aborted'               => '已中止',
     'aborting'              => '中止',
     'failed'                => '失败',
-    'running'               => '运行中',
     'cancelled'             => '已取消',
     'reason'                => '任务说明',
     'source'                => '代码',
@@ -72,5 +71,7 @@ return [
     'run_failure'           => '任务运行失败',
     'submit_success'        => '任务已提交。',
     'create_success'        => '任务已创建成功，点击查看详情。',
+    'version_name'          => '版本号',
+    'describe_version_name' => '版本号，如果不填写则不生成发布版本',
 
 ];
