@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Piplin\Bus\Jobs\AbortTaskJob;
 use Piplin\Bus\Jobs\CreateTaskJob;
 use Piplin\Http\Controllers\Controller;
+use Piplin\Models\Command;
 use Piplin\Models\PublishVersions;
 use Piplin\Models\Task;
 use Piplin\Models\Project;
@@ -88,6 +89,16 @@ class IncomingWebhookController extends Controller
             $request['branch'] = $publishVersion->branch;
             $request['commit'] = $publishVersion->commit;
             $request['source_commit'] = $publishVersion->commit;
+
+            //选择默认选中的可选命令
+            $commands = [];
+            $deployPlan->commands->filter(function (Command $command) use (&$commands) {
+                if ($command->optional && $command->default_on) {
+                    $commands[] = $command->id;
+                }
+                return $command->optional;
+            });
+            $request['commands'] = $commands;
 
             $payload = $this->parseWebhookRequest($request, $project);
 
@@ -199,8 +210,8 @@ class IncomingWebhookController extends Controller
 
         // Check if the commands input is set, if so explode on comma and filter out any invalid commands
         if ($request->has('commands')) {
-            $valid     = $project->commands->pluck('id');
-            $requested = explode(',', $request->get('commands'));
+            $valid     = $project->deployPlan->commands->pluck('id');
+            $requested = $request->get('commands');
 
             $payload['optional'] = collect($requested)->unique()
                                                       ->intersect($valid)
