@@ -444,7 +444,7 @@ class Project extends Model implements HasPresenter
     {
         $result = [];
 
-        $process = new Process('tools.getCommitMsgs', [
+        $process = new Process('tools.GetCommitMsgs', [
             'mirror_path'   => $this->mirrorPath(),
             'git_reference' => 'master',
             'line'          => 100,
