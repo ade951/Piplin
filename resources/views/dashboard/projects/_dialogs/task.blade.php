@@ -90,8 +90,15 @@
                                         <label for="task_source_commit">
                                             <input type="radio" class="task-source" name="source" id="task_source_commit" value="commit" /> {{ trans('tasks.commit') }}
 
+                                            <!--<div class="task-source-container">-->
+                                            <!--    <input class="form-control task-source" name="source_commit" id="task_commit" placeholder="{{ trans('tasks.describe_commit') }}">-->
+                                            <!--</div>-->
                                             <div class="task-source-container">
-                                                <input class="form-control task-source" name="source_commit" id="task_commit" placeholder="{{ trans('tasks.describe_commit') }}">
+                                                <select class="form-control task-source" name="source_commit" id="task_commit">
+                                                    @foreach ($commits as $commit)
+                                                    <option value="{{ $commit['hash'] }}">{{ $commit['msg'] }}</option>
+                                                    @endforeach
+                                                </select>
                                             </div>
                                         </label>
                                     </div>

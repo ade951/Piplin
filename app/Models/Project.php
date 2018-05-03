@@ -437,6 +437,29 @@ class Project extends Model implements HasPresenter
     }
 
     /**
+     * 获取当前项目的git提交版本列表
+     * @return array
+     */
+    public function commits()
+    {
+        $result = [];
+
+        $process = new Process('tools.getCommitMsgs', [
+            'mirror_path'   => $this->mirrorPath(),
+            'git_reference' => 'master',
+            'line'          => 100,
+        ]);
+        $process->run();
+        if ($process->isSuccessful()) {
+            foreach (explode(PHP_EOL, trim($process->getOutput())) as $commit) {
+                list($hash, $msg) = explode(' ', $commit, 2);
+                $result[] = compact('hash', 'msg');
+            }
+        }
+        return $result;
+    }
+
+    /**
      * Has many relationship.
      *
      * @return Release

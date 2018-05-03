@@ -54,6 +54,7 @@ class DeploymentController extends Controller
             'releases'        => $project->releases,
             'tags'            => $project->tags()->reverse(),
             'branches'        => $project->branches(),
+            'commits'         => $project->commits(),
             'tab'             => $tab,
             'title'           => trans('tasks.label'),
             'breadcrumb'      => [
