@@ -96,7 +96,7 @@
                                             <div class="task-source-container">
                                                 <select class="form-control task-source" name="source_commit" id="task_commit">
                                                     @foreach ($commits as $commit)
-                                                    <option value="{{ $commit['hash'] }}">{{ $commit['msg'] }}</option>
+                                                    <option value="{{ $commit['hash'] }}" data-msg="{{ $commit['message'] }}">{{ $commit['detail_msg'] }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>

@@ -452,8 +452,8 @@ class Project extends Model implements HasPresenter
         $process->run();
         if ($process->isSuccessful()) {
             foreach (explode(PHP_EOL, trim($process->getOutput())) as $commit) {
-                list($hash, $msg) = explode(' ', $commit, 2);
-                $result[] = compact('hash', 'msg');
+                list($hash, $message, $detail_msg) = explode("\x09", $commit, 3);
+                $result[] = compact('hash', 'message', 'detail_msg');
             }
         }
         return $result;
