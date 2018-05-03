@@ -14,6 +14,7 @@ namespace Piplin\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use Piplin\Bus\Jobs\AbortTaskJob;
 use Piplin\Bus\Jobs\CreateTaskJob;
+use Piplin\Bus\Jobs\TriggerGitUpdateJob;
 use Piplin\Http\Controllers\Controller;
 use Piplin\Models\Command;
 use Piplin\Models\PublishVersions;
@@ -148,6 +149,25 @@ class IncomingWebhookController extends Controller
         return [
             'success' => $success,
         ];
+    }
+
+    /**
+     * 当git有新的提交时，触发更新仓库信息（需要把此接口URL配置到git仓库的WebHooks列表中）
+     * @param Request $request
+     * @return mixed
+     */
+    public function gitPushed(Request $request)
+    {
+        if (!$request->has('passwd') || $request->get('passwd') !== 'jw180503') {
+            return [
+                'code' => -1,
+                'message' => '参数错误',
+            ];
+        }
+        var_dump($request->post());
+        $projectId = 1; return;//todo: get the project id
+        $project = Project::find($projectId);
+        $this->dispatch(new TriggerGitUpdateJob($project));
     }
 
     /**
