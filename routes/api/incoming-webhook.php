@@ -19,6 +19,6 @@ Route::post('build/{hash}', [
     'uses' => 'Api\IncomingWebhookController@build',
 ]);
 
-Route::match(['get', 'post'], 'webhooks/git_pushed', [
-    'uses' => 'Api\IncomingWebhookController@gitPushed',
+Route::match(['get', 'post'], 'webhooks/git/gitee_pushed', [
+    'uses' => 'Api\IncomingWebhookController@giteePushed',
 ]);

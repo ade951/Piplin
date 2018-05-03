@@ -153,19 +153,20 @@ class IncomingWebhookController extends Controller
 
     /**
      * 当git有新的提交时，触发更新仓库信息（需要把此接口URL配置到git仓库的WebHooks列表中）
+     * 此接口gitee.com专用，配置时把password配为本系统中对应的project_id
      * @param Request $request
      * @return mixed
      */
-    public function gitPushed(Request $request)
+    public function giteePushed(Request $request)
     {
-        if (!$request->has('passwd') || $request->get('passwd') !== 'jw180503') {
+        //gitee.com的hooks都有带password字段，我们在配置时统一配置为各项目的id
+        if (!$request->has('password') || !is_numeric($request->get('password'))) {
             return [
                 'code' => -1,
                 'message' => '参数错误',
             ];
         }
-        var_dump($request->post());
-        $projectId = 1; return;//todo: get the project id
+        $projectId = $request->get('password');
         $project = Project::find($projectId);
         $this->dispatch(new TriggerGitUpdateJob($project));
     }
