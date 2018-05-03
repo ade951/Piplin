@@ -43,10 +43,25 @@
                         <label class="col-sm-3 control-label" for="task_source">{{ trans('tasks.source') }} <i class="piplin piplin-clock" data-toggle="tooltip" data-placement="right" title="{{ trans('projects.last_mirrored') }}: {{ $project->last_mirrored }}"></i></label>
 						<div class="col-sm-9">
 							<ul class="list-unstyled">
+                                <li>
+                                    <div class="radio">
+                                        <label for="task_source_commit">
+                                            <input type="radio" class="task-source" name="source" id="task_source_commit" value="commit" checked /> {{ trans('tasks.commit') }}
+
+                                            <div class="task-source-container">
+                                                <select class="form-control task-source" name="source_commit" id="task_commit">
+                                                    @foreach ($commits as $commit)
+                                                    <option value="{{ $commit['hash'] }}" data-msg="{{ $commit['message'] }}">{{ $commit['detail_msg'] }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </li>
 								<li>
 									<div class="radio">
 										<label for="task_source_default">
-											<input type="radio" class="task-source" name="source" id="task_source_default" value="{{ $project->branch }}" checked /> {{ trans('tasks.default', [ 'branch' => $project->branch ]) }}
+											<input type="radio" class="task-source" name="source" id="task_source_default" value="{{ $project->branch }}" /> {{ trans('tasks.default', [ 'branch' => $project->branch ]) }}
 										</label>
 									</div>
 								</li>
@@ -85,24 +100,6 @@
 									</div>
 								</li>
 								@endif
-                                <li>
-                                    <div class="radio">
-                                        <label for="task_source_commit">
-                                            <input type="radio" class="task-source" name="source" id="task_source_commit" value="commit" /> {{ trans('tasks.commit') }}
-
-                                            <!--<div class="task-source-container">-->
-                                            <!--    <input class="form-control task-source" name="source_commit" id="task_commit" placeholder="{{ trans('tasks.describe_commit') }}">-->
-                                            <!--</div>-->
-                                            <div class="task-source-container">
-                                                <select class="form-control task-source" name="source_commit" id="task_commit">
-                                                    @foreach ($commits as $commit)
-                                                    <option value="{{ $commit['hash'] }}" data-msg="{{ $commit['message'] }}">{{ $commit['detail_msg'] }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </label>
-                                    </div>
-                                </li>
                                 @endif
                                 @if(isset($releases) && count($releases))
                                 <li>
@@ -128,7 +125,14 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label" for="task_reason">{{ trans('tasks.reason') }}</label>
 						<div class="col-sm-9">
-							<textarea rows="3" id="task_reason" class="form-control" name="reason" placeholder="{{ trans('tasks.describe_reason') }}"></textarea>
+                            <div class="checkbox">
+                                <label for="btn_use_commit">
+                                    <input type="checkbox" id="btn_use_commit" > 使用代码提交信息
+                                </label>
+                            </div>
+                            <div style="padding-top: 7px;">
+                                <textarea rows="3" id="task_reason" class="form-control" name="reason" placeholder="{{ trans('tasks.describe_reason') }}"></textarea>
+                            </div>
 						</div>
                     </div>
                     @if (count($optional))

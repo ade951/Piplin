@@ -32,6 +32,20 @@
         }
     });
 
+    //将代码提交信息作为发布说明
+    $('#btn_use_commit').on('change', function () {
+        if ($(this).is(':checked')) {
+            $('#task_reason').val($('#task_commit :checked').data('msg'));
+        } else {
+            $('#task_reason').val('');
+        }
+    });
+    $('#task_commit').on('change', function () {
+        if ($('#btn_use_commit').is(':checked')) {
+            $('#task_reason').val($('#task_commit :checked').data('msg'));
+        }
+    });
+
     $('#task button.btn-save').on('click', function (event) {
         var target = $(event.currentTarget);
         var icon = target.find('i');
