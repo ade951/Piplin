@@ -15,6 +15,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Piplin\Bus\Jobs\SetupSkeletonJob;
+use Piplin\Bus\Jobs\TriggerGitUpdateJob;
 use Piplin\Http\Controllers\Controller;
 use Piplin\Http\Requests\StoreProjectRequest;
 use Piplin\Models\Command;
@@ -43,6 +44,9 @@ class DeploymentController extends Controller
         $optional = $deployPlan->commands->filter(function (Command $command) {
             return $command->optional;
         });
+
+        //出发git pull更新
+        $this->dispatch(new TriggerGitUpdateJob($project));
 
         $data = [
             'project'         => $project,
