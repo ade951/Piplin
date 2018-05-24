@@ -59,6 +59,10 @@ class Task extends Model implements HasPresenter, RuntimeInterface
         'committer',
         'payload',
         'version_name',
+        'vsign',
+        'is_encrypt',
+        'domain_restriction',
+        'php_version',
     ];
 
     /**
@@ -66,7 +70,7 @@ class Task extends Model implements HasPresenter, RuntimeInterface
      *
      * @var array
      */
-    protected $hidden = ['created_at', 'deleted_at', 'updated_at', 'user', 'commands', 'version_name'];
+    protected $hidden = ['created_at', 'deleted_at', 'updated_at', 'user', 'commands', 'version_name', 'vsign', 'is_encrypt', 'domain_restriction', 'php_version'];
 
     /**
      * Additional attributes to include in the JSON representation.

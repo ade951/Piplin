@@ -110,14 +110,18 @@ class TaskController extends Controller
         $this->authorize('deploy', $project);
 
         $fields = [
-            'reason'          => $request->get('reason'),
-            'project_id'      => $project->id,
-            'targetable_type' => $request->get('targetable_type'),
-            'targetable_id'   => $request->get('targetable_id'),
-            'environments'    => $request->get('environments'),
-            'branch'          => $project->branch,
-            'optional'        => [],
-            'version_name'    => trim($request->get('version_name', '')),
+            'reason'             => $request->get('reason'),
+            'project_id'         => $project->id,
+            'targetable_type'    => $request->get('targetable_type'),
+            'targetable_id'      => $request->get('targetable_id'),
+            'environments'       => $request->get('environments'),
+            'branch'             => $project->branch,
+            'optional'           => [],
+            'version_name'       => trim($request->get('version_name', '')),
+            'vsign'              => $project->name . '-' . trim($request->get('vsign', '')),
+            'is_encrypt'         => $request->get('is_encrypt', ''),
+            'domain_restriction' => trim($request->get('domain_restriction', '')),
+            'php_version'        => trim($request->get('php_version', '')),
         ];
 
         /*

@@ -189,9 +189,14 @@ abstract class BaseRunTaskStepsJob
         ];
 
         if ($this->isBuild === true) {
+            $vsign = (!empty($this->task->vsign) ? $this->task->vsign : $this->task->user->name . '_build_' . date('YmdHis'));
             $tokens = array_merge($tokens, [
                 'build'         => $this->task->release_id,
                 'build_path'    => $builds_dir . '/' . $this->task->release_id,
+                'vsign'         => $vsign, //项目的唯一签名，可用于盗版系统来源追踪
+                'is_encrypt'    => $this->task->is_encrypt,
+                'php_version'   => $this->task->php_version,
+                'domain_restriction' => $this->task->domain_restriction,
             ]);
         } else {
             $author_email = '';

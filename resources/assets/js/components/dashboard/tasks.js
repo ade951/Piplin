@@ -32,6 +32,15 @@
         }
     });
 
+    //构建页面：加密面板显示与隐藏
+    $('#task_encrypt').on('change', function(){
+        if ($('#task_encrypt:checked').length > 0) {
+            $('.task-encrypt-area').show();
+        } else {
+            $('.task-encrypt-area').hide();
+        }
+    });
+
     //将代码提交信息作为发布说明
     $('#btn_use_commit').on('change', function () {
         if ($(this).is(':checked')) {
@@ -80,6 +89,10 @@
             source_tag:      $('#task_tag').val(),
             source_commit:   $('#task_commit').val(),
             source_release:  $('#task_release').val(),
+            vsign:           $('#task_vsign').val(),
+            is_encrypt:      $('#task_encrypt').is(':checked') ? 1 : 0,
+            domain_restriction:$('#task_encrypt_domain').val(),
+            php_version:     $('input[name=php_version]:checked').val(),
             optional:        optional
         }, {
             wait: true,
