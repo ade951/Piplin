@@ -11,17 +11,12 @@
 
 namespace Piplin\Http\Controllers\Dashboard;
 
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Piplin\Bus\Jobs\SetupSkeletonJob;
 use Piplin\Bus\Jobs\TriggerGitUpdateJob;
 use Piplin\Http\Controllers\Controller;
-use Piplin\Http\Requests\StoreProjectRequest;
 use Piplin\Models\Command;
 use Piplin\Models\DeployPlan;
 use Piplin\Models\Task;
-use Piplin\Models\Project;
 
 /**
  * The controller of deploy plans.
@@ -45,7 +40,7 @@ class DeploymentController extends Controller
             return $command->optional;
         });
 
-        //出发git pull更新
+        //触发git pull更新
         $this->dispatch(new TriggerGitUpdateJob($project));
 
         $data = [

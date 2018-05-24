@@ -12,11 +12,11 @@
 namespace Piplin\Http\Controllers\Dashboard;
 
 use Illuminate\Http\Request;
+use Piplin\Bus\Jobs\TriggerGitUpdateJob;
 use Piplin\Http\Controllers\Controller;
+use Piplin\Models\BuildPlan;
 use Piplin\Models\Command;
 use Piplin\Models\Task;
-use Piplin\Models\BuildPlan;
-use Piplin\Models\Project;
 
 /**
  * The controller of build plans.
@@ -40,6 +40,9 @@ class BuildController extends Controller
             return $command->optional;
         });
 
+        //触发git pull更新
+        $this->dispatch(new TriggerGitUpdateJob($project));
+
         $data    = [
             'buildPlan'       => $buildPlan,
             'project'         => $project,
@@ -47,6 +50,7 @@ class BuildController extends Controller
             'targetable_id'   => $buildPlan->id,
             'tags'            => $project->tags()->reverse(),
             'branches'        => $project->branches(),
+            'commits'         => $project->commits(),
             'environments'    => [],
             'optional'        => $optional,
             'releases'        => [],
