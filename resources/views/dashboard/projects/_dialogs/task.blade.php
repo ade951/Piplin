@@ -124,7 +124,68 @@
 							</ul>
 						</div>
                     </div>
+                    <hr>
+                    @if (isset($buildPlan))
+                    <div class="form-group">
+                        <label for="task_vsign" class="col-sm-3 control-label">项目签名 <i class="piplin piplin-info" data-toggle="tooltip" data-placement="right" title="建议使用客户域名加日期，如：fastpay.zuy.com_20180524"></i></label>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="text" id="task_vsign">
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="form-group">
+                        <label for="task_encrypt" class="col-sm-3 control-label">源码加密</label>
+                        <div class="col-sm-9">
+                            <div class="checkbox">
+                                <label for="task_encrypt">
+                                    <input type="checkbox" id="task_encrypt" name="is_encrypt" checked> 启用
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group task-encrypt-area">
+                        <label for="task_encrypt_domain" class="col-sm-3 control-label">域名限制 <i class="piplin piplin-info" data-toggle="tooltip" data-placement="right" title="可运行加密代码的机器的hostname，此选项留空或者0代表不限制运行加密代码的机器的域名(可以是多个域名 用“,”隔离即可,支持*前缀 例如*.swoole.com代表允许所有swoole.com的二级域名运行加密文件)"></i></label>
+                        <div class="col-sm-9">
+                            <input class="form-control" type="text" id="task_encrypt_domain" name="domain_restriction">
+                        </div>
+                    </div>
+                    <div class="form-group task-encrypt-area">
+                        <label for="task_encrypt" class="col-sm-3 control-label">PHP版本 <i class="piplin piplin-info" data-toggle="tooltip" data-placement="right" title="加密后的代码只能在特定的PHP版本上运行"></i></label>
+                        <div class="col-sm-9">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="php_version" id="phpVersion1" value="7.2">
+                                    <label class="form-check-label" for="phpVersion1" style="width: 50px;">
+                                        7.2
+                                    </label>
+
+                                    <input class="form-check-input" type="radio" name="php_version" id="phpVersion2" value="7.1">
+                                    <label class="form-check-label" for="phpVersion2" style="width: 50px;">
+                                        7.1
+                                    </label>
+
+                                    <input class="form-check-input" type="radio" name="php_version" id="phpVersion3" value="7.0" checked="">
+                                    <label class="form-check-label" for="phpVersion3" style="width: 50px;">
+                                        7.0
+                                    </label>
+
+                                    <input class="form-check-input" type="radio" name="php_version" id="phpVersion3" value="5.6">
+                                    <label class="form-check-label" for="phpVersion3" style="width: 50px;">
+                                        5.6
+                                    </label>
+
+                                    <!--<input class="form-check-input" type="radio" name="php_version" id="phpVersion3" value="5.5">-->
+                                    <!--<label class="form-check-label" for="phpVersion3">-->
+                                    <!--    5.5-->
+                                    <!--</label>-->
+                                    <!--<input class="form-check-input" type="radio" name="php_version" id="phpVersion3" value="5.4">-->
+                                    <!--<label class="form-check-label" for="phpVersion3">-->
+                                    <!--    5.4-->
+                                    <!--</label>-->
+                                </div>
+                        </div>
+                    </div>
                     <hr />
+                    @endif
                     @endif
                     <div class="form-group">
                         <label class="col-sm-3 control-label" for="task_reason">{{ trans('tasks.reason') }}</label>
