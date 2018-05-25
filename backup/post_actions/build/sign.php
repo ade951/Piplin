@@ -22,7 +22,7 @@ $configFile = ROOT_PATH . 'application/extra/deploy_unique.php';
 
 
 $vsign = $argv[2];
-$projectId = $projectId[2];
+$projectId = $argv[3];
 echo "using project dir: " . ROOT_PATH . "\n";
 echo "using vsign: $vsign\n";
 echo "using project_id: $projectId\n";
