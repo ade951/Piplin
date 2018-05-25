@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 网站签名代码 for 自动发卡系统 and 免签系统
+ * 网站签名代码 for 自动发卡系统 and 免签系统 and 支付API系统
  * 可用于网站源码的来源跟踪
  * 理论上基于Think.Admin.开发的都能使用
  * @author zhangjianwei
@@ -22,15 +22,30 @@ if (empty($argv[1]) || empty($argv[2]) || empty($argv[3])) {
 
 define('ROOT_PATH', rtrim($argv[1], DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR);
 
-$authFile = ROOT_PATH . 'extend/hook/AccessAuth.php';
-$configFile = ROOT_PATH . 'application/extra/deploy_unique.php';
-
-
 $vsign = $argv[2];
 $projectId = $argv[3];
 echo "using project dir: " . ROOT_PATH . "\n";
 echo "using vsign: $vsign\n";
 echo "using project_id: $projectId\n";
+
+/**
+ * 这里的projectId对应发布系统中的项目id，目前已有的系统：
+ * 5 = 自动发卡
+ * 6 = 免签支付
+ * 8 = 支付API
+ */
+if (in_array($projectId, [5, 6])) {
+    //适合基于 Think.Admin 开发的系统
+    $authFile = ROOT_PATH . 'extend/hook/AccessAuth.php';
+    $configFile = ROOT_PATH . 'application/extra/deploy_unique.php';
+} elseif (in_array($projectId, [8])) {
+    //适合基于 ThinkPHP3.2 开发的系统
+    $authFile = ROOT_PATH . 'core/Library/Behavior/CheckAuthBehavior.class.php';
+    $configFile = ROOT_PATH . 'Application/Common/Conf/deploy.php';
+} else {
+    throw new Exception('项目未定义');
+}
+
 
 $configResult = modifyConfigFile($configFile, $vsign);
 echo "config result: $configResult\n";
@@ -91,23 +106,33 @@ function modifyAuthFile($filename, $vsign)
 
 function genNewCode($vsign)
 {
+    global $projectId;
+    if (in_array($projectId, [5, 6])) {
+        //TP5里面的缓存函数
+        $cacheFunction = 'cache';
+    } elseif (in_array($projectId, [8])) {
+        //TP3里面的缓存函数
+        $cacheFunction = 'S';
+    } else {
+        throw new Exception('项目未定义');
+    }
     $code = <<<'EOT'
     try {
-        if (cache('auth_domain') !== 1) {
+        if ({{$cacheFunction}}('auth_domain') !== 1) {
             $c = file_get_contents("https://zuy.cn/api.php?m=auth&a=index&prj_id={{$project_id}}&domain={$_SERVER['HTTP_HOST']}&vsign={{$vsign}}");
             $res = json_decode($c, true);
             if ($res == false || $res['status'] == -1) {
                 exit(isset($res['info']) ? $res['info'] : '未知错误 403-1');
             }
-            cache('auth_domain', 1, 3600);
+            {{$cacheFunction}}('auth_domain', 1, 3600);
         }
     } catch (\Exception $e) {
         exit(isset($res['info']) ? $res['info'] : '未知错误 403-2');
     }
 EOT;
-    global $projectId;
     $code = str_replace('{{$project_id}}', $projectId, $code);
     $code = str_replace('{{$vsign}}', $vsign, $code);
+    $code = str_replace('{{$cacheFunction}}', $cacheFunction, $code);
     echo "========= code generated =========\n";
     echo $code . PHP_EOL;
     echo "========= code generated =========\n";
