@@ -14,6 +14,11 @@
 //$argv[2] = 'www.glpay.com|MianQianZhiFu|201805251747';
 //$argv[3] = '6';
 
+//这段代码可以方便手工执行
+//$argv[1] = '/data/webroot/zuyapi/';
+//$argv[2] = 'pay.tianniu.cc|zuyapi|201805251853';
+//$argv[3] = '8';
+
 if (empty($argv[1]) || empty($argv[2]) || empty($argv[3])) {
     echo "usage: php {$argv[0]} [project_path] [vsign] [project_id]\n";
     echo "example: php {$argv[0]} /data/webroot/zidongfaka 'local.faka.cn|20180524' 5\n";
@@ -48,7 +53,7 @@ if (in_array($projectId, [5, 6])) {
 
 
 $configResult = modifyConfigFile($configFile, $vsign);
-echo "config result: $configResult\n";
+echo "config result: $configResult\n\n";
 
 $authResult = modifyAuthFile($authFile, $vsign);
 echo "auth result: $authResult\n";
@@ -77,6 +82,9 @@ function modifyConfigFile($filename, $vsign)
     }
     $config['vhash'] = md5($vsign);
     $content = "<?php\n\nreturn " . var_export($config, true) . ";";
+    echo "↓↓↓↓↓↓↓↓↓↓ vhash generated ↓↓↓↓↓↓↓↓↓↓\n";
+    echo $content . PHP_EOL;
+    echo "↑↑↑↑↑↑↑↑↑↑ vhash generated ↑↑↑↑↑↑↑↑↑↑\n";
     return (file_put_contents($filename, $content) > 0);
 }
 
@@ -133,8 +141,8 @@ EOT;
     $code = str_replace('{{$project_id}}', $projectId, $code);
     $code = str_replace('{{$vsign}}', $vsign, $code);
     $code = str_replace('{{$cacheFunction}}', $cacheFunction, $code);
-    echo "========= code generated =========\n";
+    echo "↓↓↓↓↓↓↓↓↓↓ code generated ↓↓↓↓↓↓↓↓↓↓\n";
     echo $code . PHP_EOL;
-    echo "========= code generated =========\n";
+    echo "↑↑↑↑↑↑↑↑↑↑ code generated ↑↑↑↑↑↑↑↑↑↑\n";
     return base64_encode($code);
 }
