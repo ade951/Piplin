@@ -197,6 +197,7 @@ abstract class BaseRunTaskStepsJob
                 'is_encrypt'    => $this->task->is_encrypt,
                 'php_version'   => $this->task->php_version,
                 'domain_restriction' => $this->task->domain_restriction,
+                'project_id'    => $this->project->id,
             ]);
         } else {
             $author_email = '';

@@ -127,7 +127,7 @@
                     <hr>
                     @if (isset($buildPlan))
                     <div class="form-group">
-                        <label for="task_vsign" class="col-sm-3 control-label">项目签名 <i class="piplin piplin-info" data-toggle="tooltip" data-placement="right" title="建议使用客户域名加日期，如：fastpay.zuy.com_20180524"></i></label>
+                        <label for="task_vsign" class="col-sm-3 control-label">项目签名 <i class="piplin piplin-info" data-toggle="tooltip" data-placement="right" title="填写客户信息，如填写公司名或域名，可用于盗版系统来源跟踪"></i></label>
                         <div class="col-sm-9">
                             <input class="form-control" type="text" id="task_vsign">
                         </div>

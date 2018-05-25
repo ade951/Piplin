@@ -109,6 +109,9 @@ class TaskController extends Controller
 
         $this->authorize('deploy', $project);
 
+        //项目签名格式：客户信息|仓库名|构建用户ID|构建用户名|构建时间
+        $vsign = sprintf("%s|%s|%s|%s|%s", trim($request->get('vsign', '')), $project->repository_path, Auth::user()->id, Auth::user()->name, date('YmdHis'));
+
         $fields = [
             'reason'             => $request->get('reason'),
             'project_id'         => $project->id,
@@ -118,7 +121,7 @@ class TaskController extends Controller
             'branch'             => $project->branch,
             'optional'           => [],
             'version_name'       => trim($request->get('version_name', '')),
-            'vsign'              => $project->name . '-' . trim($request->get('vsign', '')),
+            'vsign'              => $vsign,
             'is_encrypt'         => $request->get('is_encrypt', ''),
             'domain_restriction' => trim($request->get('domain_restriction', '')),
             'php_version'        => trim($request->get('php_version', '')),
