@@ -9,6 +9,11 @@
  * @update 2018-05-25
  */
 
+//这段代码可以方便手工执行
+//$argv[1] = '/data/webroot/MianQianZhiFu/';
+//$argv[2] = 'www.glpay.com|MianQianZhiFu|201805251747';
+//$argv[3] = '6';
+
 if (empty($argv[1]) || empty($argv[2]) || empty($argv[3])) {
     echo "usage: php {$argv[0]} [project_path] [vsign] [project_id]\n";
     echo "example: php {$argv[0]} /data/webroot/zidongfaka 'local.faka.cn|20180524' 5\n";
