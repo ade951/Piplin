@@ -447,7 +447,7 @@ class Project extends Model implements HasPresenter
         $process = new Process('tools.GetCommitMsgs', [
             'mirror_path'   => $this->mirrorPath(),
             'git_reference' => 'master',
-            'line'          => 100,
+            'line'          => 1000,
         ]);
         $process->run();
         if ($process->isSuccessful()) {
