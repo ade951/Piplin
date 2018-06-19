@@ -40,7 +40,7 @@
                         </td>
                         <td class="status"><span class="text-{{$group_project->css_class}}"><i class="piplin piplin-{{ $group_project->icon }}"></i> <span>{{ $group_project->readable_status }}</span></span></td>
                         <td class="text-right">
-                            <a href="{{ route('patches', ['id' => $group_project->buildPlan->id]) }}" type="button" class="btn btn-primary" title="提取更新包">提取更新包</i></a>
+                            <a href="{{ route('patches', ['id' => $group_project->buildPlan->id]) }}" type="button" class="btn btn-primary" title="提取更新包"><i class="piplin piplin-slack"></i></a>
                             @if($group_project->buildPlan)
                             <a href="{{ route('builds', ['id' => $group_project->buildPlan->id, 'tab' => 'build']) }}" type="button" class="btn btn-success" title="{{ trans('projects.build') }}"><i class="piplin piplin-build"></i></a>
                             @endif
