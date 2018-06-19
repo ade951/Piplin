@@ -14,6 +14,10 @@ Route::group([
         'namespace'  => 'Dashboard',
     ], function () {
         // Project
+        Route::match(['get', 'post'], 'project/encryptor', [
+            'as' => 'encryptor',
+            'uses' => 'ProjectController@encryptor',
+        ]);
         //打更新包
         Route::get('project/{project}/patches', [
             'as' => 'patches',

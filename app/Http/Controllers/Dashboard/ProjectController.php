@@ -74,6 +74,17 @@ class ProjectController extends Controller
     }
 
     /**
+     * 项目加密
+     */
+    public function encryptor(Request $request)
+    {
+        //if ($request->allFiles())
+        //{
+        //    var_dump($request->allFiles());
+        //}
+        return view('dashboard.encryptor.show');
+    }
+
     /**
      * 打更新包操作界面
      * @param Project $project
