@@ -14,6 +14,15 @@ Route::group([
         'namespace'  => 'Dashboard',
     ], function () {
         // Project
+        //打更新包
+        Route::get('project/{project}/patches', [
+            'as' => 'patches',
+            'uses' => 'ProjectController@patches',
+        ]);
+        Route::get('project/{project}/createPatch', [
+            'as' => 'createPatch',
+            'uses' => 'ProjectController@createPatch',
+        ]);
         Route::get('project/{project}/{tab?}', [
             'as'   => 'projects',
             'uses' => 'ProjectController@show',

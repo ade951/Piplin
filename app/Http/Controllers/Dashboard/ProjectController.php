@@ -22,6 +22,8 @@ use Piplin\Models\Command;
 use Piplin\Models\PublishVersions;
 use Piplin\Models\Task;
 use Piplin\Models\Project;
+use Piplin\Services\Scripts\Parser as ScriptParser;
+use Piplin\Services\Scripts\Runner as Process;
 
 /**
  * The controller of projects.
@@ -69,6 +71,84 @@ class ProjectController extends Controller
         }
 
         return view('dashboard.projects.show', $data);
+    }
+
+    /**
+    /**
+     * 打更新包操作界面
+     * @param Project $project
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function patches(Project $project)
+    {
+        $data = [
+            'project' => $project,
+            'tags' => $project->tags()->reverse()->all(),
+            'urlCreatePatch' => route('createPatch', ['project' => $project]),
+        ];
+        return view('dashboard.patches.index', $data);
+    }
+
+    /**
+     * 打更新包
+     */
+    public function createPatch(Request $request, Project $project)
+    {
+        $fromTag = $request->get('from');
+        $toTag = $request->get('to');
+        if (empty($project) || empty($fromTag) || empty($toTag)) {
+            throw new \Exception('参数错误');
+        }
+
+        $private_key = tempnam(storage_path('app/'), 'sshkey');
+        file_put_contents($private_key, $project->private_key_content);
+        chmod($private_key, 0600);
+
+        $wrapper = with(new ScriptParser)->parseFile('tools.SSHWrapperScript', [
+            'private_key' => $private_key,
+        ]);
+
+        $wrapper_file = tempnam(storage_path('app/'), 'gitssh');
+        file_put_contents($wrapper_file, $wrapper);
+        chmod($wrapper_file, 0755);
+
+        $save_relative_path = 'upload/patches/' . date('YmdHis') . random_int(1000, 9999) . '/';
+        $save_path = public_path($save_relative_path);
+        if (!is_dir($save_path)) {
+            mkdir($save_path, 0755, true);
+        }
+        $patch_filename = $project->name . $fromTag . '-' . $toTag . '.tar.gz';
+
+        $archive_path = storage_path('app/patches/' . date('YmdHis') . random_int(1000, 9999) . '/');
+        if (!is_dir($archive_path)) {
+            mkdir($archive_path, 0755, true);
+        }
+
+        $process = new Process('tools.CreatePatch', [
+            'wrapper_file' => $wrapper_file,
+            'mirror_path'  => $project->mirrorPath(),
+            'repository'   => $project->repository,
+            'from_tag'     => $fromTag,
+            'to_tag'       => $toTag,
+            'archive_path' => $archive_path,
+            'save_path'    => $save_path . $patch_filename,
+        ]);
+        //因shell脚本中含有中文字符，所以这里应该用UTF-8编码
+        $process->setEnv(['LANG' => 'en_US.UTF-8']);
+        $process->run();
+
+        unlink($wrapper_file);
+        unlink($private_key);
+        if (is_dir($archive_path)) {
+            exec('rm -rf ' . $archive_path);
+        }
+
+        return view('dashboard.patches.download', [
+            'project' => $project,
+            'url' => url($save_relative_path . $patch_filename),
+            'output' => $process->getOutput(),
+            'errorOutput' => $process->getErrorOutput(),
+        ]);
     }
 
     /**
