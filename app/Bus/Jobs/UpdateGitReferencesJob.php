@@ -14,6 +14,7 @@ namespace Piplin\Bus\Jobs;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use Piplin\Models\Project;
 use Piplin\Models\Ref;
 use Piplin\Services\Scripts\Runner as Process;
@@ -65,6 +66,7 @@ class UpdateGitReferencesJob extends Job implements ShouldQueue
             ]);
             $process->run();
 
+            Log::debug('UpdateGitReference: [' . $process->isSuccessful() . ']');
             if ($process->isSuccessful()) {
                 foreach (explode(PHP_EOL, trim($process->getOutput())) as $reference) {
                     $reference = trim($reference);

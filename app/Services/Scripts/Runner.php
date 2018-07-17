@@ -87,6 +87,22 @@ class Runner
 
         $this->process->setCommandLine($command);
 
+        //增加一个默认的callback，用于输出命令执行的日志
+        if ($callback == null) {
+            $callback = function ($type, $content) {
+                switch ($type) {
+                    case 'out':
+                        Log::info($content);
+                        break;
+                    case 'err':
+                        Log::error($content);
+                        break;
+                    default:
+                        Log::debug($content);
+                }
+            };
+        }
+
         return $this->process->run($callback);
     }
 
