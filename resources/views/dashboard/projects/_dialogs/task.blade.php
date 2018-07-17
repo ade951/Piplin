@@ -40,7 +40,6 @@
 						</div>
                     </div>
                     @endif
-                    @if (count($branches) || count($tags) || count($releases))
                     <div class="form-group">
                         <label class="col-sm-3 control-label" for="task_source">{{ trans('tasks.source') }} <i class="piplin piplin-clock" data-toggle="tooltip" data-placement="right" title="{{ trans('projects.last_mirrored') }}: {{ $project->last_mirrored }}"></i></label>
 						<div class="col-sm-9">
@@ -185,7 +184,6 @@
                         </div>
                     </div>
                     <hr />
-                    @endif
                     @endif
                     <div class="form-group">
                         <label class="col-sm-3 control-label" for="task_reason">{{ trans('tasks.reason') }}</label>
