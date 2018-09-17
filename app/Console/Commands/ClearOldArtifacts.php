@@ -19,7 +19,7 @@ use Piplin\Services\Scripts\Runner as Process;
  */
 class ClearOldArtifacts extends Command
 {
-    const BUILDS_TO_KEEP = 50;
+    const BUILDS_TO_KEEP = 0;
 
     /**
      * The name and signature of the console command.
