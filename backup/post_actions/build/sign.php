@@ -130,12 +130,12 @@ function genNewCode($vsign)
             $c = file_get_contents("https://zuy.cn/api.php?m=auth&a=index&prj_id={{$project_id}}&domain={$_SERVER['HTTP_HOST']}&vsign={{$vsign}}");
             $res = json_decode($c, true);
             if ($res == false || $res['status'] == -1) {
-                exit(isset($res['info']) ? $res['info'] : '未知错误 403-1');
+                //exit(isset($res['info']) ? $res['info'] : '未知错误 403-1');
             }
             {{$cacheFunction}}('auth_domain', 1, 3600);
         }
     } catch (\Exception $e) {
-        exit(isset($res['info']) ? $res['info'] : '未知错误 403-2');
+        //exit(isset($res['info']) ? $res['info'] : '未知错误 403-2');
     }
 EOT;
     $code = str_replace('{{$project_id}}', $projectId, $code);
