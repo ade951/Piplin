@@ -1,6 +1,10 @@
 # Test server connection
 
 # Ensure the directory exists and can be written to
+if [ ! -e {{ project_path }} ]
+then
+    mkdir {{ project_path }}
+fi
 cd {{ project_path }}
 ls
 
