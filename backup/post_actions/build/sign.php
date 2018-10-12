@@ -38,12 +38,13 @@ echo "using project_id: $projectId\n";
  * 5 = 自动发卡
  * 6 = 免签支付
  * 8 = 支付API
+ * 11 = 支付API
  */
 if (in_array($projectId, [5, 6])) {
     //适合基于 Think.Admin 开发的系统
     $authFile = ROOT_PATH . 'extend/hook/AccessAuth.php';
     $configFile = ROOT_PATH . 'application/extra/deploy_unique.php';
-} elseif (in_array($projectId, [8])) {
+} elseif (in_array($projectId, [8, 11])) {
     //适合基于 ThinkPHP3.2 开发的系统
     $authFile = ROOT_PATH . 'core/Library/Behavior/CheckAuthBehavior.class.php';
     $configFile = ROOT_PATH . 'Application/Common/Conf/deploy.php';
@@ -52,10 +53,10 @@ if (in_array($projectId, [5, 6])) {
 }
 
 
-$configResult = modifyConfigFile($configFile, $vsign);
+$configResult = modifyConfigFile($configFile);
 echo "config result: $configResult\n\n";
 
-$authResult = modifyAuthFile($authFile, $vsign);
+$authResult = modifyAuthFile($authFile);
 echo "auth result: $authResult\n";
 
 if ($configResult && $authResult) {
@@ -67,12 +68,13 @@ if ($configResult && $authResult) {
 /**
  * 修改配置文件
  * @param $filename
- * @param $vsign
  * @return bool
  * @throws Exception
  */
-function modifyConfigFile($filename, $vsign)
+function modifyConfigFile($filename)
 {
+    global $vsign, $projectId;
+
     if (!is_file($filename)) {
         throw new Exception("配置文件不存在");
     }
@@ -80,6 +82,7 @@ function modifyConfigFile($filename, $vsign)
     if (!is_array($config)) {
         throw new Exception("配置文件错误");
     }
+    $config['project_id'] = $projectId;
     $config['vhash'] = md5($vsign);
     $content = "<?php\n\nreturn " . var_export($config, true) . ";";
     echo "↓↓↓↓↓↓↓↓↓↓ vhash generated ↓↓↓↓↓↓↓↓↓↓\n";
@@ -91,11 +94,10 @@ function modifyConfigFile($filename, $vsign)
 /**
  * 修改Auth文件
  * @param $filename
- * @param $vsign
  * @return bool
  * @throws Exception
  */
-function modifyAuthFile($filename, $vsign)
+function modifyAuthFile($filename)
 {
     $content = file_get_contents($filename);
     $pattern = '/(protected function auth\(\)[ \r\n\t]*\{[ \r\n\t]*eval\(base64_decode\(\')([^\']+)(\'\)\);[ \r\n\t]*}[ \r\n\t]*})/';
@@ -104,7 +106,7 @@ function modifyAuthFile($filename, $vsign)
         throw new Exception('代码有变更，请联系管理员');
     }
 
-    $newCode = genNewCode($vsign);
+    $newCode = genAuthCode();
     $replace = '$1' . $newCode . '$3';
     $newContent = preg_replace($pattern, $replace, $content);
 
@@ -112,13 +114,13 @@ function modifyAuthFile($filename, $vsign)
 }
 
 
-function genNewCode($vsign)
+function genAuthCode()
 {
-    global $projectId;
+    global $projectId, $vsign;
     if (in_array($projectId, [5, 6])) {
         //TP5里面的缓存函数
         $cacheFunction = 'cache';
-    } elseif (in_array($projectId, [8])) {
+    } elseif (in_array($projectId, [8, 11])) {
         //TP3里面的缓存函数
         $cacheFunction = 'S';
     } else {
