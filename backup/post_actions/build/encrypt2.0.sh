@@ -38,7 +38,7 @@ compiled_archived_path={{ build_path }}/app_encrypted.tar.gz
 # 不需要进行加密的PHP文件或者路径
 # 请按照示例所示格式添加
 ## 设置加密文件黑名单的示例
-exclude_list=("{{ build_path }}/Runtime" "{{ build_path }}/Application/Common/Conf")
+exclude_list=("{{ build_path }}/Runtime" "{{ build_path }}/Application/Common/Conf" "{{ build_path }}/config" "{{ build_path }}/demo" "{{ build_path }}/application/database.php" "{{ build_path }}/application/config.php" "{{ build_path }}/application/office.php")
 ## 不设置加密文件黑名单的示例
 #exclude_list=""
 
