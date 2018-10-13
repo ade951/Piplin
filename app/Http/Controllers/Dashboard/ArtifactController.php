@@ -33,6 +33,9 @@ class ArtifactController extends Controller
     public function download(Project $project, Artifact $artifact, ResponseFactory $response)
     {
         $file = storage_path('app/artifacts/build-'.$artifact->task_id.'/'.$artifact->file_name);
+        if (!is_file($file)) {
+            abort(404, 'File Not Found');
+        }
 
         return $response->download($file);
     }
