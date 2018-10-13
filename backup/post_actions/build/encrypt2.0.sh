@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # 脚本名称：源码加密打包2.0
 # 用途：加密源码并打包
 # 配置路径：项目主页 > 构建计划 > 构建结果 > 后置任务
@@ -5,8 +6,8 @@
 # 依赖：swoole-compiler 2.0.0
 
 # 创建加密配置文件
-configFile=/tmp/swoole-compiler-config-{{ project_id }}.conf
-cat > $configFile <<EOT
+configFile=/tmp/swoole-compiler-config-"{{ project_id }}".conf
+cat > ${configFile} <<EOT
 ################################################
 #          Swoole-Compiler 配置文件示例
 #
@@ -78,17 +79,18 @@ licensed_to="{{ domain_restriction }}"
 EOT
 
 # 执行加密
-swoole-compiler -c $configFile
+swoole-compiler -c ${configFile}
 
 # 删除加密配置文件
-if [ -f $configFile ]
+if [ -f ${configFile} ]
 then
-    rm $configFile
+    rm ${configFile}
 fi
 
 # 判断加密结果
-if [ -f {{ build_path }}/app_encrypted.tar.gz ]
+if [ -f "{{ build_path }}"/app_encrypted.tar.gz ]
 then
+  mv "{{ build_path }}"/app_encrypted.tar.gz app_encrypted_for_"{{ domain_restriction }}".tar.gz
   echo 'file generated, exit 0'
   exit 0
 fi
