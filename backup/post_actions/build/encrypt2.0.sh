@@ -22,7 +22,7 @@ cat > ${configFile} <<EOT
 # 项目名称配置
 # 项目名称的格式要求为英文字母的组合
 # 如果需要设置自定义信息或者限制代码的运行环境，例如ip地址，mac地址，hostname，代码有效时间等，则需要设置此参数。否则，此参数请留空
-product_name=zuyapi_partner
+product_name=zhiyu
 
 ################## 加密代码配置 ##################
 
@@ -78,7 +78,10 @@ copyright="广州知宇信息科技有限公司"
 licensed_to="{{ domain_restriction }}"
 EOT
 
-# 执行加密
+# 生成证书
+swoole-compiler -t license -c ${configFile}
+chmod 440 license_zhiyu
+# 加密打包
 swoole-compiler -c ${configFile}
 
 # 删除加密配置文件
